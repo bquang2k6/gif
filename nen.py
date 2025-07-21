@@ -1,8 +1,17 @@
 from PIL import Image
 from rembg import remove
 import numpy as np
-import io
 import os
+
+def crop_to_square(frame):
+    """Cắt khung hình thành tỷ lệ 1:1 (hình vuông) từ trung tâm."""
+    width, height = frame.size
+    target_size = min(width, height)  # Lấy kích thước nhỏ nhất để tạo hình vuông
+    left = (width - target_size) // 2
+    top = (height - target_size) // 2
+    right = left + target_size
+    bottom = top + target_size
+    return frame.crop((left, top, right, bottom))
 
 def extract_frames(gif_path):
     """Tách các khung hình từ file GIF."""
@@ -37,21 +46,24 @@ def create_gif(frames, output_path, duration):
         )
 
 def remove_gif_background(input_path, output_path):
-    """Xử lý GIF: tách nền và lưu kết quả."""
+    """Xử lý GIF: cắt 1:1, tách nền và lưu kết quả."""
     # Tách khung hình
     frames, duration = extract_frames(input_path)
     
-    # Xóa nền cho từng khung hình
+    # Cắt và xóa nền cho từng khung hình
     processed_frames = []
     for frame in frames:
-        frame_no_bg = remove_background_from_frame(frame)
+        # Cắt khung hình thành tỷ lệ 1:1
+        cropped_frame = crop_to_square(frame)
+        # Xóa nền của khung hình đã cắt
+        frame_no_bg = remove_background_from_frame(cropped_frame)
         processed_frames.append(frame_no_bg)
     
     # Tạo GIF mới
     create_gif(processed_frames, output_path, duration)
-    print(f"Đã lưu GIF với nền trong suốt tại: {output_path}")
+    print(f"Đã lưu GIF với nền trong suốt và tỷ lệ 1:1 tại: {output_path}")
 
 # Sử dụng công cụ
 input_gif = "uia.gif"  # Thay bằng đường dẫn tới file GIF của bạn
-output_gif = "output_no_bg.gif"  # Đường dẫn lưu file GIF đầu ra
+output_gif = "output_no_bg_square.gif"  # Đường dẫn lưu file GIF đầu ra
 remove_gif_background(input_gif, output_gif)
