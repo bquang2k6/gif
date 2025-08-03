@@ -64,6 +64,6 @@ def remove_gif_background(input_path, output_path):
     print(f"Đã lưu GIF với nền trong suốt và tỷ lệ 1:1 tại: {output_path}")
 
 # Sử dụng công cụ
-input_gif = "uia.gif"  # Thay bằng đường dẫn tới file GIF của bạn
-output_gif = "output_no_bg_square.gif"  # Đường dẫn lưu file GIF đầu ra
+input_gif = "0808.gif"  # Thay bằng đường dẫn tới file GIF của bạn
+output_gif = "08088.gif"  # Đường dẫn lưu file GIF đầu ra
 remove_gif_background(input_gif, output_gif)

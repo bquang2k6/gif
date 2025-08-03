@@ -26,17 +26,6 @@ def parse_github_url(url):
     path = path or ""
     return username, repo, branch, path
 
-def convert_to_raw_url(url):
-    """Chuyển đổi URL GitHub blob thành link raw."""
-    try:
-        username, repo, branch, path = parse_github_url(url)
-        if not branch:  # Nếu không có branch trong URL, lấy branch mặc định
-            branch = get_default_branch(username, repo)
-        raw_url = f"https://raw.githubusercontent.com/{username}/{repo}/refs/heads/{branch}/{path}"
-        return f'"{raw_url}",'
-    except ValueError as e:
-        return f"Error: {str(e)}"
-
 def get_gifs_from_repo(repo_url, token=None):
     """Lấy tất cả file GIF từ một repository hoặc thư mục."""
     try:
@@ -64,36 +53,20 @@ def get_gifs_from_repo(repo_url, token=None):
         return [f"Error: {str(e)}"]
 
 def main():
-    print("Chọn chế độ:")
-    print("1. Chuyển đổi từng URL GitHub blob sang raw")
-    print("2. Lấy tất cả file GIF từ một repository/thư mục")
-    choice = input("Nhập lựa chọn (1 hoặc 2): ").strip()
-
-    if choice == "1":
-        print("Nhập các URL GitHub blob (mỗi URL trên một dòng, nhập dòng trống để kết thúc):")
-        urls = []
-        while True:
-            url = input().strip()
-            if not url:
-                break
-            urls.append(url)
-        
-        print("\nKết quả link raw:")
-        for url in urls:
-            result = convert_to_raw_url(url)
-            print(result)
-
-    elif choice == "2":
-        repo_url = input("Nhập URL repository hoặc thư mục (ví dụ: https://github.com/username/repo hoặc https://github.com/username/repo/tree/main/folder): ").strip()
-        token = input("Nhập GitHub token (nếu repository riêng tư, để trống nếu công khai): ").strip() or None
-        
-        raw_links = get_gifs_from_repo(repo_url, token)
-        print("\nDanh sách link raw của các file GIF:")
+    # URL mặc định
+    repo_url = "https://github.com/bquang2k6/gif"
+    # Token để trống nếu repository công khai, hoặc thay bằng token của bạn nếu riêng tư
+    token = None  # Thay bằng token nếu cần: "your_github_token_here"
+    
+    print(f"Đang lấy các file GIF từ {repo_url}...")
+    raw_links = get_gifs_from_repo(repo_url, token)
+    
+    print("\nDanh sách link raw của các file GIF:")
+    if raw_links:
         for link in raw_links:
             print(link)
-
     else:
-        print("Lựa chọn không hợp lệ!")
+        print("Không tìm thấy file GIF nào trong repository.")
 
 if __name__ == "__main__":
     main()
