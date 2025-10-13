@@ -55,6 +55,7 @@ def get_gifs_from_repo(repo_url, token=None):
 def main():
     # URL mặc định
     repo_url = "https://github.com/bquang2k6/gif"
+    # repo_url = "https://github.com/bquang2k6/gif/icon"
     # Token để trống nếu repository công khai, hoặc thay bằng token của bạn nếu riêng tư
     token = None  # Thay bằng token nếu cần: "your_github_token_here"
     
